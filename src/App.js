@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from 'react-bootstrap/Button';
@@ -7,6 +7,8 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { useDispatch, useSelector } from 'react-redux';
+import { deposit, withdraw } from './Store.js';
 
 import Calculator from './Calculator.js';
 import History from './History.js';
@@ -52,11 +54,36 @@ function App() {
 }
 
 function Content() {
+  const balance = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  const buttonConfigs = [
+    { id: "deposit", label: "DEPOSIT", action: () => dispatch(deposit(10)) },
+    { id: "withdraw", label: "WITHDRAW", action: () => dispatch(withdraw(5)) }
+  ];
+
   return (
-    <Routes>
-      <Route path="/" element={<Calculator />} />
-      <Route path="/history" element={<History />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Calculator />} />
+        <Route path="/history" element={<History />} />
+      </Routes>
+
+      <div>
+        <h1 id="output">Balance: {balance}</h1>
+        {buttonConfigs.map((button) => (
+          <Button
+            key={button.id}
+            id={button.id}
+            className="button-spacing"
+            onClick={button.action}
+            style={{ margin: '5px' }}
+          >
+            {button.label}
+          </Button>
+        ))}
+      </div>
+    </>
   );
 }
 

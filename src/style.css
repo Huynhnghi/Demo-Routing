@@ -59,3 +59,7 @@ h2 {
 .keyboard button:nth-child(4n):hover {
     background-color: #ec971f;
 }
+
+.button-spacing {
+    margin-right: 10px;
+}
